@@ -1,0 +1,2 @@
+/* Determines if fastmath is enabled for GPU code. */
+#define FASTMATH 0

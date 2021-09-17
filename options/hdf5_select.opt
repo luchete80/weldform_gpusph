@@ -1,0 +1,2 @@
+/* Determines if we are using HDF5 or not. */
+#define USE_HDF5 0

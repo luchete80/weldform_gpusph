@@ -1,0 +1,2 @@
+/* git branch --v. */
+#define GIT_INFO_OUTPUT "* master 08ffd94d [origin/master] Add more info to CONTRIBUTING"

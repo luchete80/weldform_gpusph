@@ -1,0 +1,39 @@
+/* make show of GPUSPH. */
+#define MAKE_SHOW_OUTPUT "GPUSPH version:  v5.0+1-08ffd94d\n\
+Platform:        Linux\n\
+Architecture:    x86_64\n\
+Current dir:     /home/lucho/Numerico/gpusph\n\
+This Makefile:   /home/lucho/Numerico/gpusph/Makefile\n\
+Used Makefiles:   Makefile Makefile.conf dep/Integrator.d dep/Writer.d dep/GPUWorker.d dep/Synchronizer.d dep/VTUReader.d dep/ParticleSystem.d dep/ProblemCore.d dep/main.d dep/vector_print.d dep/Reader.d dep/GPUSPH.d dep/Options.d dep/base64.d dep/HDF5SphReader.d dep/pugixml.d dep/predcorr_alloc_policy.d dep/buffer_traits.d dep/debugflags.d dep/command_type.d dep/simframework.d dep/XYZReader.d dep/cuda/cudautil.d dep/geometries/Vector.d dep/geometries/STLMesh.d dep/geometries/Cylinder.d dep/geometries/Point.d dep/geometries/TopoCube.d dep/geometries/Object.d dep/geometries/Disk.d dep/geometries/EulerParameters.d dep/geometries/Cone.d dep/geometries/Cube.d dep/geometries/Sphere.d dep/geometries/Torus.d dep/geometries/Plane.d dep/geometries/Rect.d dep/integrators/RepackingIntegrator.d dep/integrators/PredictorCorrectorIntegrator.d dep/problem_api/ProblemAPI_1.d dep/writers/UDPWriter.d dep/writers/CommonWriter.d dep/writers/CustomTextWriter.d dep/writers/CallbackWriter.d dep/writers/TextWriter.d dep/writers/HotFile.d dep/writers/VTKWriter.d dep/writers/VTKLegacyWriter.d dep/writers/HotWriter.d dep/NetworkManager.d dep/problems/DamBreak3D.d dep/DamBreak3D.gen.d\n\
+Problem:         \n\
+Linearization:   yzx\n\
+Snapshot file:   ./GPUSPH-v5.0+1-08ffd94d-2021-05-29.tgz\n\
+Last problem:    Poiseuille\n\
+Sources dir:     src src/adaptors src/cuda src/geometries src/integrators src/problem_api src/problems src/writers\n\
+Options dir:     options\n\
+Objects dir:     build build/adaptors build/cuda build/geometries build/integrators build/problem_api build/problems build/problems/user build/writers\n\
+Scripts dir:     scripts\n\
+Docs dir:        docs\n\
+Doxygen conf:    \n\
+Verbose:         \n\
+Debug:           0\n\
+CXX:             g++\n\
+CXX version:     g++ (Ubuntu 9.3.0-17ubuntu1~20.04) 9.3.0\n\
+MPICXX:          g++\n\
+nvcc:            /usr/local/cuda/bin/nvcc -ccbin=g++\n\
+nvcc version:    11.4\n\
+LINKER:          /usr/local/cuda/bin/nvcc -ccbin=g++\n\
+Compute cap.:    35\n\
+Fastmath:        0\n\
+USE_MPI:         0\n\
+USE_HDF5:        0\n\
+USE_CHRONO:      0\n\
+default paths:   /usr/include/c++/9 /usr/include/x86_64-linux-gnu/c++/9 /usr/include/c++/9/backward /usr/lib/gcc/x86_64-linux-gnu/9/include /usr/local/include /usr/include/x86_64-linux-gnu /usr/include\n\
+INCPATH:          -Isrc -Isrc/adaptors -Isrc/cuda -Isrc/geometries -Isrc/integrators -Isrc/problem_api -Isrc/problems -Isrc/writers -Isrc/problems -Isrc/problems/user -Ioptions\n\
+LIBPATH:          -L/usr/local/lib -L/usr/local/cuda/lib64\n\
+LIBS:             -lcudart -lpthread -lrt\n\
+LDFLAGS:           -L/usr/local/lib -L/usr/local/cuda/lib64 -arch=sm_35\n\
+CPPFLAGS:          -Isrc -Isrc/adaptors -Isrc/cuda -Isrc/geometries -Isrc/integrators -Isrc/problem_api -Isrc/problems -Isrc/writers -Isrc/problems -Isrc/problems/user -Ioptions -D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS -D_GLIBCXX_USE_C99_MATH -DUSE_HDF5=0 -D__COMPUTE__=35\n\
+CXXFLAGS:         -m64 -std=c++11 -O3\n\
+CUFLAGS:          -arch=sm_35 --generate-line-info -std=c++11 --compiler-options -m64,-O3\n\
+"

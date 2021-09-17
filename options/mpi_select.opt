@@ -1,0 +1,2 @@
+/* Determines if we are using MPI (for multi-node) or not. */
+#define USE_MPI 0

@@ -1,0 +1,2 @@
+/* Determines if Chrono is enabled. */
+#define USE_CHRONO 0

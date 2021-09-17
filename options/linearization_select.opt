@@ -1,0 +1,5 @@
+/* Linearization order */
+#define LINEARIZATION "yzx"
+#define COORD1 y
+#define COORD2 z
+#define COORD3 x

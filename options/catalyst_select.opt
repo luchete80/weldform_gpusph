@@ -1,0 +1,2 @@
+/* Determines if we are using Catalyst or not. */
+#define USE_CATALYST 0
