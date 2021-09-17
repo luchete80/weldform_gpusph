@@ -1,7 +1,7 @@
-file(GLOB SOURCE
+file(GLOB CUDA_SOURCES
        #${PROJECT_SOURCE_DIR}/
 			 *.cu			 
 			 )
 
 
-add_library (geometries ${SOURCE})
+add_library (cuda ${CUDA_SOURCES})
