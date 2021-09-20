@@ -1,8 +1,12 @@
 #include_directories("${CMAKE_SOURCE_DIR}")
 #include_directories("${CMAKE_SOURCE_DIR}/include")
-
-set(CMAKE_CUDA_COMPILER "/usr/local/cuda-11.4/bin/nvcc")
-
+if (NOT DEFINED  CMAKE_CUDA_COMPILER)
+	if (UNIX)
+		set(CMAKE_CUDA_COMPILER "/usr/local/cuda-11.4/bin/nvcc")
+	else()
+		set(CMAKE_CUDA_COMPILER "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.2")
+	endif()
+endif()
 project(gpusph LANGUAGES CXX CUDA)
 
 
