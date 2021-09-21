@@ -3138,6 +3138,71 @@ struct forces_shared_data :
 	}
 };
 
+// SOLID MECHANICS
+
+/// 
+template<typename FP, typename P, typename N, typename OP, typename ON>
+__device__ __forceinline__
+enable_if_t<FP::sph_formulation == SPH_GRENIER>
+compute_tensile_instability
+(FP const& params, P const& pdata, N const& ndata, OP &pout, ON &nout)
+{
+	const float pGradTerm = full_pressure_gradient_term(params, pdata, ndata);
+	nout.DvDt -= pGradTerm*ndata.f*as_float3(ndata.relPos);
+	
+	symtensor3 TIij;
+	
+	TIij = W<FP::kerneltype>(ndata.r, params.slength);
+		// double GK	= GradKernel(Dimension, KernelType, rij/h, h);
+		// double K	= Kernel(Dimension, KernelType, rij/h, h);
+	// set_to_zero(TIij);
+	// if (P1->TI > 0.0 || P2->TI > 0.0) 
+		// TIij = pow((K/Kernel(Dimension, KernelType, (P1->TIInitDist + P2->TIInitDist)/(2.0*h), h)),(P1->TIn+P2->TIn)/2.0)*(P1->TIR+P2->TIR);
+		// //TIij = pow((K/m_kernel.W((P1->TIInitDist + P2->TIInitDist)/(2.0*h))),(P1->TIn+P2->TIn)/2.0)*(P1->TIR+P2->TIR);
+
+}
+
+//Based on viscous_fixup, 
+template<typename FP, typename P, typename OP>
+__device__ __forceinline__
+enable_if_t< FP::boundarytype == SA_BOUNDARY >
+compute_Sij_contrib(FP const& params, P const& pdata, OP &pout)
+{
+	// final division for diff and dv{x,y,z} terms
+	const float rhoGam = physical_density(pdata)*pdata.gGam.w;
+
+	// finalize diffusion terms
+	pout.diff_term_k /= rhoGam;
+	pout.diff_term_e /= rhoGam;
+
+	// velocity gradients should be divided by rhoGam as well,
+	// but since we're also going to do a bunch of multiplications and
+	// then a square root, we'll just divide afterwards instead.
+	// In fact, the square norm of the Sij tensor will be divided
+	// even after the norm itself
+#if 0
+	pout.dvx /= rhoGam;	// dvx = -1/γa*ρa ∑mb vxab (ra - rb)/r ∂Wab/∂r
+	pout.dvy /= rhoGam;	// dvy = -1/γa*ρa ∑mb vyab (ra - rb)/r ∂Wab/∂r
+	pout.dvz /= rhoGam;	// dvz = -1/γa*ρa ∑mb vzab (ra - rb)/r ∂Wab/∂r
+#endif
+
+	// Calculate norm of the mean strain rate tensor
+	// TODO GB: unify strain rate tensor computation, it's needed by KEPS, SPS and non-Newtonian rheologies
+	float SijSij_bytwo =
+		2.0f*(pout.tau.xx*pout.tau.xx +
+			  pout.tau.yy*pout.tau.yy +
+			  pout.tau.zz*pout.tau.zz)+ // 2*SijSij = 2.0((∂vx/∂x)^2 + (∂vy/∂yx)^2 + (∂vz/∂z)^2)
+		pout.tau.xy*pout.tau.xy +		// 2*SijSij += (∂vx/∂y + ∂vy/∂x)^2
+		pout.tau.xz*pout.tau.xz +		// 2*SijSij += (∂vx/∂z + ∂vz/∂x)^2
+		pout.tau.yz*pout.tau.yz;		// 2*SijSij += (∂vy/∂z + ∂vz/∂y)^2
+
+	// Strain rate
+	const float S = sqrtf(SijSij_bytwo)/rhoGam;
+	// don't forget to divide SijSij_bytwo = S^2 too:
+	SijSij_bytwo /= rhoGam*rhoGam;
+	
+	//nout.DvDt+=;
+}
 
 /************************************************************************************************************/
 /*		   Particle-particle interaction											                        */
