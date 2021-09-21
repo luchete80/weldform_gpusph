@@ -1,2 +1,2 @@
 /* git version of GPUSPH. */
-#define GPUSPH_VERSION "v5.0+1-08ffd94d"
+#define GPUSPH_VERSION "unknown-version"
