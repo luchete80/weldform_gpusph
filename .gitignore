@@ -55,6 +55,8 @@ log*
 src/problems/user
 
 src/parse-debugflags.h
+
+Poiseuille
 src/describe-debugflags.h
 
 .nfs*
