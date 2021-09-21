@@ -3561,7 +3561,40 @@ struct forces_shared_data :
  * all contributions,and is used for fluid/fluid interaction as well as several
  * fluid/boundary interactions. Which of the contributions actually does anything
  * depends on the specific SFINAE of the individual contribution
- */
+ */// ORIGINAL: LUCIANO
+// template<typename FP, typename P, typename N, typename OP, typename ON>
+// __device__ __forceinline__
+// void
+// compute_all_pp_interaction(FP const& params, P const& pdata, N const & ndata, OP & pout, ON & nout)
+// {
+	// // Compute gamma_as and |grad gamma_as| and add it to the respective values
+	// // of the focal particle
+	// compute_gamma_gradient(params, pdata, ndata, pout, nout);
+
+	// compute_density_derivative(params, pdata, ndata, pout, nout);
+
+	// // Compute pressure part of acceleration
+	// compute_pressure_contrib(params, pdata, ndata, pout, nout);
+
+	// // Compute viscous forces
+	// compute_viscous_contrib(params, pdata, ndata, pout, nout);
+
+	// // Compute diffusion terms for k-epsilon and the strain rate tensor
+	// compute_keps_term(params, pdata, ndata, pout, nout);
+
+	// // Compute gamma CFL
+	// compute_gamma_cfl(params, pdata, ndata, pout, nout);
+
+	// // Compute mean velocity for the use in the XSPH variant. Contribution added in euler.
+	// compute_mean_vel(params, pdata, ndata, pout, nout);
+
+	// // Sum all contributions from the neighbors in the force array
+	// as_float3(pout.force) += nout.DvDt;
+
+	// // Summ all internal energy contributions from the neighbors
+	// add_internal_energy(params, pdata, ndata, pout, nout);
+// }
+
 template<typename FP, typename P, typename N, typename OP, typename ON>
 __device__ __forceinline__
 void
@@ -3594,7 +3627,6 @@ compute_all_pp_interaction(FP const& params, P const& pdata, N const & ndata, OP
 	// Summ all internal energy contributions from the neighbors
 	add_internal_energy(params, pdata, ndata, pout, nout);
 }
-
 /*
  * Fluid central, fluid neighbors
  */
