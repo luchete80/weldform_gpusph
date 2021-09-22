@@ -27,14 +27,14 @@
 
 #include <iostream>
 
-#include "DamBreak3D.h"
+#include "Compression.h"
 #include "Cube.h"
 #include "Point.h"
 #include "Vector.h"
 #include "GlobalData.h"
 #include "cudasimframework.cu"
 
-DamBreak3D::DamBreak3D(GlobalData *_gdata) : Problem(_gdata)
+Compression::Compression(GlobalData *_gdata) : Problem(_gdata)
 {
 	// *** user parameters from command line
 	const bool WET = get_option("wet", false);
@@ -82,7 +82,7 @@ DamBreak3D::DamBreak3D(GlobalData *_gdata) : Problem(_gdata)
 	const float g = get_gravity_magnitude();
 	const double H = 0.4;
 	setMaxFall(H);
-	add_fluid(1000.0);
+	add_fluid(2700.0);
 
 	//add_fluid(2350.0);
 	set_equation_of_state(0,  7.0f, 20.0f);
@@ -104,7 +104,7 @@ DamBreak3D::DamBreak3D(GlobalData *_gdata) : Problem(_gdata)
 	add_writer(VTKWRITER, 0.005f);
 	//addPostProcess(VORTICITY);
 	// *** Other parameters and settings
-	m_name = "DamBreak3D";
+	m_name = "Compression";
 
 	// *** Geometrical parameters, starting from the size of the domain
 	const double dimX = 1.6;
@@ -161,43 +161,6 @@ DamBreak3D::DamBreak3D(GlobalData *_gdata) : Problem(_gdata)
 	// rotation angle
 	const double Z_ANGLE = M_PI / 4;
 
-
-
-// activate the solid obstacle
-
-	for (uint i = 0; i < NUM_OBSTACLES; i++) {
-		// Obstacle is of type GT_MOVING_BODY, although the callback is not even implemented, to
-		// make the forces feedback available
-		GeometryID obstacle = addBox(GT_MOVING_BODY, FT_BORDER,
-			Point(obstacle_xpos, Y_DISTANCE * (i+1) + (ROTATE_OBSTACLE ? obstacle_side/2 : 0), 0),
-				obstacle_side, obstacle_side, dimZ );
-		if (ROTATE_OBSTACLE) {
-			rotate(obstacle, 0, 0, Z_ANGLE);
-			// until we'll fix it, the rotation centers are always the corners
-			// shift(obstacle, 0, obstacle_side/2, 0);
-		}
-		// enable force feedback to measure forces
-		enableFeedback(obstacle);
-	}
-
-
-
-
-
-
-	// Optionally, add a floating objects
-	/*
-	// set positioning policy to PP_CENTER: given point will be the geometrical center of the object
-	setPositioning(PP_CENTER);
-	GeometryID floating_obj =
-		addSphere(GT_FLOATING_BODY, FT_BORDER, Point(water_length, dimY/2, water_height), obstacle_side);
-	// half water density to make it float
-	setMassByDensity(floating_obj, physparams()->rho0[0] / 2);
-	setParticleMassByDensity(floating_obj, physparams()->rho0[0] / 2);
-	// disable collisions: will only interact with fluid
-	// disableCollisions(floating_obj);
-	*/
-
 	// add testpoints
 	const float TESTPOINT_DISTANCE = dimZ / (NUM_TESTPOINTS + 1);
 	for (uint t = 0; t < NUM_TESTPOINTS; t++)
@@ -214,13 +177,13 @@ DamBreak3D::DamBreak3D(GlobalData *_gdata) : Problem(_gdata)
 }
 
 // since the fluid topology is roughly symmetric along Y through the whole simulation, prefer Y split
-void DamBreak3D::fillDeviceMap()
+void Compression::fillDeviceMap()
 {
 	fillDeviceMapByAxis(Y_AXIS);
 }
 
 /*
-bool DamBreak3D::need_write(double t) const
+bool Compression::need_write(double t) const
 {
  	return 0;
 }

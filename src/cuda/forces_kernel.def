@@ -898,6 +898,41 @@ struct gamma_cfl_particle_output
 };
 
 // KEPSILON
+struct strain_particle_output {
+	symtensor3 tau;
+
+	// tau will be used to store the strain rate tensor
+	// (not exactly though: since we'll need to multiply by two later,
+	// the off-diagonal elements will be stored premultiplied)
+	__device__ __forceinline__
+	void add_strain_rate(float4 const& relVel, float3 const& mul)
+	{
+		float3 dvx = relVel.x*mul;
+		float3 dvy = relVel.y*mul;
+		float3 dvz = relVel.z*mul;
+
+		tau.xx += dvx.x;
+		tau.xy += dvx.y + dvy.x;
+		tau.xz += dvx.z + dvz.x;
+		tau.yy += dvy.y;
+		tau.yz += dvy.z + dvz.y;
+		tau.zz += dvz.z;
+	}
+
+	__device__ __forceinline__
+	strain_particle_output() {
+		clear(tau);
+	}
+
+	template<typename FP>
+	__device__ __forceinline__
+	strain_particle_output(FP const& params, uint index) {
+		tau = fetchTau(index, params.tau0, params.tau1, params.tau2);
+
+	}
+};
+
+// KEPSILON
 struct keps_particle_output
 {
 	symtensor3 tau;

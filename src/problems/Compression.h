@@ -25,20 +25,20 @@
     along with GPUSPH.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _DAMBREAK3D_H
-#define	_DAMBREAK3D_H
+#ifndef _Compression_H
+#define	_Compression_H
 
 #define PROBLEM_API 1
 #include "Problem.h"
 
-class DamBreak3D: public Problem {
+class Compression: public Problem {
 	private:
 	public:
-		DamBreak3D(GlobalData *);
-		//virtual ~DamBreak3D(void);
+		Compression(GlobalData *);
+		//virtual ~Compression(void);
 		// override standard split
 		void fillDeviceMap();
 		//bool need_write(double) const;
 };
-#endif	/* _DAMBREAK3D_H */
+#endif	/* _Compression_H */s
 

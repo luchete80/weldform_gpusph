@@ -369,6 +369,10 @@ typedef struct PhysParams {
 	 * @{ */
 	float	cosconeanglefluid;	     ///< Cosine of cone angle for free surface detection (If the neighboring particle is fluid)
 	float	cosconeanglenonfluid;	 ///< Cosine of cone angle for free surface detection (If the neighboring particle is non_fluid
+	
+	//////////////// SOLID MECHANICS PARAMS 
+	float sigma_y0; 	//Initial yield stress (for bilinear mats)
+	
 	/** @} */
 
 	/** \name Other parameters
