@@ -43,7 +43,7 @@
 
 #include "device_core.cu"
 
-#include "visc_kernel.cu"
+//#include "visc_kernel.cu"
 
 
 #if __COMPUTE__ < 20
@@ -72,7 +72,7 @@ using namespace cugeom;
 using namespace cusph;
 using namespace cuphys;
 using namespace cuneibs;
-using namespace cuvisc;
+//using namespace cuvisc;
 
 // Core SPH functions
 /** \name Device constants

@@ -4,10 +4,10 @@ Platform:        Linux\n\
 Architecture:    x86_64\n\
 Current dir:     /home/lucho/Numerico/weldform_gpusph\n\
 This Makefile:   /home/lucho/Numerico/weldform_gpusph/Makefile\n\
-Used Makefiles:   Makefile Makefile.conf dep/Integrator.d dep/Writer.d dep/GPUWorker.d dep/Synchronizer.d dep/VTUReader.d dep/ParticleSystem.d dep/ProblemCore.d dep/main.d dep/vector_print.d dep/Reader.d dep/GPUSPH.d dep/Options.d dep/base64.d dep/HDF5SphReader.d dep/pugixml.d dep/predcorr_alloc_policy.d dep/buffer_traits.d dep/debugflags.d dep/command_type.d dep/simframework.d dep/XYZReader.d dep/cuda/cudautil.d dep/geometries/Vector.d dep/geometries/STLMesh.d dep/geometries/Cylinder.d dep/geometries/Point.d dep/geometries/TopoCube.d dep/geometries/Object.d dep/geometries/Disk.d dep/geometries/EulerParameters.d dep/geometries/Cone.d dep/geometries/Cube.d dep/geometries/Sphere.d dep/geometries/Torus.d dep/geometries/Plane.d dep/geometries/Rect.d dep/integrators/RepackingIntegrator.d dep/integrators/PredictorCorrectorIntegrator.d dep/problem_api/ProblemAPI_1.d dep/writers/UDPWriter.d dep/writers/CommonWriter.d dep/writers/CustomTextWriter.d dep/writers/CallbackWriter.d dep/writers/TextWriter.d dep/writers/HotFile.d dep/writers/VTKWriter.d dep/writers/VTKLegacyWriter.d dep/writers/HotWriter.d dep/NetworkManager.d dep/problems/Compression.d\n\
+Used Makefiles:   Makefile Makefile.conf dep/problems/Compression.d\n\
 Problem:         \n\
 Linearization:   yzx\n\
-Snapshot file:   ./GPUSPH-unknown-version-2021-09-21.tgz\n\
+Snapshot file:   ./GPUSPH-unknown-version-2021-09-24.tgz\n\
 Last problem:    Compression\n\
 Sources dir:     src src/adaptors src/cuda src/geometries src/integrators src/problem_api src/problems src/writers\n\
 Options dir:     options\n\
