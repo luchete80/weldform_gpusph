@@ -351,7 +351,7 @@ basicstep(
 			bufread, bufwrite, numParticles, dt, t)); \
 	} else { \
 		cueuler::eulerDevice<<< numBlocks, numThreads >>>( \
-			euler_params<kerneltype, sph_formulation, boundarytype, ViscSpec, simflags, step>( \
+			euler_params<kerneltype, sph_formulation, boundarytype, /*ViscSpec, */simflags, step>( \
 			bufread, bufwrite, numParticles, dt, t)); \
 	} \
 	break;

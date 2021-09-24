@@ -315,14 +315,13 @@ template<KernelType _kerneltype,
 	SPHFormulation _sph_formulation,
 	DensityDiffusionType _densitydiffusiontype,
 	BoundaryType _boundarytype,
-	typename _ViscSpec,
+	//typename _ViscSpec,
 	flag_t _simflags,
 	ParticleType _cptype,
 	ParticleType _nptype,
 	RunMode _run_mode = SIMULATE,
 	bool _repacking = (_run_mode == REPACK),
-	bool _has_keps = _ViscSpec::turbmodel == KEPSILON,
-	bool _has_effective_visc = NEEDS_EFFECTIVE_VISC(_ViscSpec::rheologytype),
+
 	typename xsph_cond =
 		typename COND_STRUCT(!_repacking && (_simflags & ENABLE_XSPH) && _cptype == _nptype, xsph_forces_params),
 	typename vol_cond =
@@ -334,34 +333,35 @@ template<KernelType _kerneltype,
 		typename COND_STRUCT(_boundarytype == SA_BOUNDARY && _cptype != _nptype, sa_boundary_forces_params),
 	typename water_depth_cond =
 		typename COND_STRUCT(!_repacking && _simflags & ENABLE_WATER_DEPTH, water_depth_forces_params),
-	typename keps_cond =
-		typename COND_STRUCT(!_repacking && _has_keps, keps_forces_params),
+
 	typename energy_cond =
 		typename COND_STRUCT(!_repacking && (_simflags & ENABLE_INTERNAL_ENERGY),
-			internal_energy_forces_params),
-	typename visc_cond =
-		typename COND_STRUCT(!_repacking && _has_effective_visc, effective_visc_forces_params)
+			internal_energy_forces_params)
+//	typename visc_cond =
+//		typename COND_STRUCT(!_repacking && _has_effective_visc, effective_visc_forces_params)
 	>
-struct forces_params : _ViscSpec,
+struct forces_params : 
+	
 	common_forces_params,
 	xsph_cond,
 	vol_cond,
 	grenier_cond,
 	sa_cond,
 	water_depth_cond,
-	keps_cond,
-	energy_cond,
-	visc_cond
+	
+	energy_cond
+	//,
+	//visc_cond
 {
 	static const KernelType kerneltype = _kerneltype;
 	static const SPHFormulation sph_formulation = _sph_formulation;
 	static const DensityDiffusionType densitydiffusiontype = _densitydiffusiontype;
 	static const BoundaryType boundarytype = _boundarytype;
 
-	using ViscSpec = _ViscSpec;
-	static const RheologyType rheologytype = ViscSpec::rheologytype;
-	static const TurbulenceModel turbmodel = ViscSpec::turbmodel;
-	static const ViscousModel viscmodel = ViscSpec::viscmodel;
+	
+//	static const RheologyType rheologytype = ViscSpec::rheologytype;
+//	static const TurbulenceModel turbmodel = ViscSpec::turbmodel;
+//	static const ViscousModel viscmodel = ViscSpec::viscmodel;
 
 	static const flag_t simflags = _simflags;
 	static const ParticleType cptype = _cptype;
@@ -369,9 +369,9 @@ struct forces_params : _ViscSpec,
 
 	static const RunMode run_mode = _run_mode;
 	static const bool repacking = _repacking;
-	static const bool has_keps = _has_keps;
-	static const bool has_effective_visc = _has_effective_visc;
-	static const bool inviscid = rheologytype == INVISCID;
+	
+//	static const bool has_effective_visc = _has_effective_visc;
+	//static const bool inviscid = rheologytype == INVISCID;
 
 	// This structure provides a constructor that takes as arguments the union of the
 	// parameters that would ever be passed to the forces kernel.
@@ -403,7 +403,7 @@ struct forces_params : _ViscSpec,
 		grenier_cond(bufread),
 		sa_cond(bufread, bufwrite, _epsilon),
 		water_depth_cond(_IOwaterdepth),
-		keps_cond(bufread, bufwrite),
+		//keps_cond(bufread, bufwrite),
 		energy_cond(bufwrite),
 		visc_cond(bufread)
 	{}
@@ -418,18 +418,22 @@ template<KernelType _kerneltype,
 	ParticleType _cptype,
 	ParticleType _nptype>
 using repack_params = forces_params<_kerneltype, SPH_F1, DENSITY_DIFFUSION_NONE,
-	  _boundarytype, repackViscSpec<_simflags>, _simflags, _cptype, _nptype, REPACK>;
+	  _boundarytype, 
+	  //repackViscSpec<_simflags>, 
+	  _simflags, _cptype, _nptype, REPACK>;
 
 /// The actual finalize_forces_params struct, which concatenates all of the above, as appropriate.
 template<SPHFormulation _sph_formulation,
 	BoundaryType _boundarytype,
-	typename _ViscSpec,
+	//typename _ViscSpec,
 	flag_t _simflags,
 	RunMode _run_mode = SIMULATE,
 	bool _repacking = (_run_mode == REPACK),
+	/*
 	bool _has_keps = _ViscSpec::turbmodel == KEPSILON,
 	bool _inviscid = _ViscSpec::rheologytype == INVISCID,
 	bool _has_effective_visc = NEEDS_EFFECTIVE_VISC(_ViscSpec::rheologytype),
+	*/
 	typename dyndt_cond =
 		typename COND_STRUCT(_simflags & ENABLE_DTADAPT, dyndt_finalize_forces_params),
 	typename grenier_cond =
@@ -438,10 +442,10 @@ template<SPHFormulation _sph_formulation,
 		typename COND_STRUCT(_boundarytype == SA_BOUNDARY, sa_finalize_forces_params),
 	typename water_depth_cond =
 		typename COND_STRUCT(!_repacking && (_simflags & ENABLE_WATER_DEPTH), water_depth_forces_params),
-	typename keps_cond = typename COND_STRUCT(!_repacking && _has_keps, keps_forces_params),
+	//typename keps_cond = typename COND_STRUCT(!_repacking && _has_keps, keps_forces_params),
 	typename energy_cond =
 		typename COND_STRUCT(!_repacking && (_simflags & ENABLE_INTERNAL_ENERGY), internal_energy_forces_params),
-	typename visc_cond = typename COND_STRUCT(!_repacking && _has_effective_visc, effective_visc_forces_params)
+	//typename visc_cond = typename COND_STRUCT(!_repacking && _has_effective_visc, effective_visc_forces_params)
 	>
 struct finalize_forces_params :
 	common_finalize_forces_params<_run_mode>,
@@ -449,24 +453,26 @@ struct finalize_forces_params :
 	grenier_cond,
 	sa_cond,
 	water_depth_cond,
-	keps_cond,
+	//keps_cond,
 	energy_cond,
 	visc_cond
 {
 	static const SPHFormulation sph_formulation = _sph_formulation;
 	static const BoundaryType boundarytype = _boundarytype;
 
+	/*
 	using ViscSpec = _ViscSpec;
 	static const RheologyType rheologytype = ViscSpec::rheologytype;
 	static const TurbulenceModel turbmodel = ViscSpec::turbmodel;
 	static const ViscousModel viscmodel = ViscSpec::viscmodel;
-
+	*/
+	
 	static const flag_t simflags = _simflags;
 
 	static const RunMode run_mode = _run_mode;
 	static const bool repacking = _repacking;
-	static const bool has_keps = _has_keps;
-	static const bool has_effective_visc = _has_effective_visc;
+	//static const bool has_keps = _has_keps;
+	//static const bool has_effective_visc = _has_effective_visc;
 	static const bool inviscid = _inviscid;
 
 	// This structure provides a constructor that takes as arguments the union of the
@@ -491,16 +497,17 @@ struct finalize_forces_params :
 		grenier_cond(bufread),
 		sa_cond(bufread),
 		water_depth_cond(_IOwaterdepth),
-		keps_cond(bufread, bufwrite),
+		//keps_cond(bufread, bufwrite),
 		energy_cond(bufwrite),
 		visc_cond(bufread)
 	{}
 };
 
 template<BoundaryType _boundarytype, flag_t _simflags>
+/*
 using finalize_repack_params = finalize_forces_params<SPH_F1,
 	  _boundarytype, repackViscSpec<_simflags>, _simflags, REPACK>;
-
+*/
 
 #endif // _FORCES_PARAMS_H
 

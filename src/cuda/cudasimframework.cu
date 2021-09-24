@@ -78,17 +78,20 @@ using namespace std;
 // SA_BOUNDARY BoundaryType, and returns NULL otherwise.
 
 // General case
-template<KernelType kerneltype, typename ViscSpec,
+template<KernelType kerneltype, 
+	//typename ViscSpec,
 	BoundaryType boundarytype, flag_t simflags>
 struct CUDABoundaryConditionsSelector
 {
-	typedef CUDABoundaryConditionsEngine<kerneltype, ViscSpec, boundarytype, simflags> BCEtype;
+	typedef CUDABoundaryConditionsEngine<kerneltype, /*ViscSpec, */boundarytype, simflags> BCEtype;
 	static BCEtype* select()
 	{ return NULL; } // default, no BCE
 };
 
 // SA_BOUNDARY specialization
-template<KernelType kerneltype, typename ViscSpec, flag_t simflags>
+template<KernelType kerneltype,
+// typename ViscSpec, 
+flag_t simflags>
 struct CUDABoundaryConditionsSelector<kerneltype, ViscSpec, SA_BOUNDARY, simflags>
 {
 	typedef CUDABoundaryConditionsEngine<kerneltype, ViscSpec, SA_BOUNDARY, simflags> BCEtype;
@@ -132,7 +135,7 @@ template<
 	SPHFormulation _sph_formulation,
 	DensityDiffusionType _densitydiffusiontype,
 	RheologyType _rheologytype,
-	TurbulenceModel _turbmodel,
+	//TurbulenceModel _turbmodel,
 	ComputationalViscosityType _compvisc,
 	ViscousModel _viscmodel,
 	AverageOperator _viscavgop,
@@ -142,8 +145,8 @@ template<
 	flag_t _simflags,
 	bool _is_const_visc = (_legacyvisctype == KINEMATICVISC) || (
 		IS_SINGLEFLUID(_simflags) &&
-		(_rheologytype == NEWTONIAN) &&
-		(_turbmodel != KEPSILON)
+		(_rheologytype == NEWTONIAN) 
+		//&& (_turbmodel != KEPSILON)
 	),
 	bool invalid_combination =
 		// Currently, we consider invalid only the case
@@ -152,13 +155,16 @@ template<
 		// TODO extend to include all unsupported/untested combinations for other boundary conditions
 
 		(_legacyvisctype == KINEMATICVISC && IS_MULTIFLUID(_simflags)) || // kinematicvisc model only made sense for single-fluid
-		(_turbmodel == KEPSILON && _boundarytype != SA_BOUNDARY) || // k-epsilon only supported in SA currently
+		//(_turbmodel == KEPSILON && _boundarytype != SA_BOUNDARY) 
+		//|| // k-epsilon only supported in SA currently
 		(_boundarytype == SA_BOUNDARY && (
 			// viscosity
 			_viscmodel != MORRIS			||	// untested
 			(_viscavgop != ARITHMETIC && _rheologytype != GRANULAR && _sph_formulation != SPH_HA)		||	// untested
+			/*
 			_turbmodel == SPS			||	// untested
 			_turbmodel == ARTIFICIAL		||	// untested (use is discouraged, use density diffusion instead)
+			*/
 			// kernel
 			! (_kerneltype == WENDLAND)		||	// only the Wendland kernel is allowed in SA_BOUNDARY
 												// all other kernels would require their respective
@@ -196,7 +202,7 @@ public:
 	static const DensityDiffusionType densitydiffusiontype = _densitydiffusiontype;
 
 	static const RheologyType rheologytype = _rheologytype;
-	static const TurbulenceModel turbmodel = _turbmodel;
+	//static const TurbulenceModel turbmodel = _turbmodel;
 	static const ComputationalViscosityType compvisc = _compvisc;
 	static const ViscousModel viscmodel = _viscmodel;
 	// Grenier used to assume harmonic averaging regardless of the specification. Today we support
@@ -210,8 +216,6 @@ public:
 	);
 	static const bool is_const_visc = _is_const_visc;
 
-	using ViscSpec = FullViscSpec<_rheologytype, _turbmodel, _compvisc,
-	      _viscmodel, viscavgop, _simflags, _is_const_visc>;
 
 	static const BoundaryType boundarytype = _boundarytype;
 	static const Periodicity periodicbound = _periodicbound;
@@ -220,11 +224,11 @@ public:
 public:
 	CUDASimFrameworkImpl() : SimFramework()
 	{
-		m_neibsEngine = new CUDANeibsEngine<sph_formulation, ViscSpec, boundarytype, periodicbound, true>();
-		m_integrationEngine = new CUDAPredCorrEngine<sph_formulation, boundarytype, kerneltype, ViscSpec, simflags>();
+		m_neibsEngine = new CUDANeibsEngine<sph_formulation, /*ViscSpec, */boundarytype, periodicbound, true>();
+		m_integrationEngine = new CUDAPredCorrEngine<sph_formulation, boundarytype, kerneltype, /*ViscSpec,*/ simflags>();
 		//m_viscEngine = new CUDAViscEngine<ViscSpec, kerneltype, boundarytype, simflags>();
-		m_forcesEngine = new CUDAForcesEngine<kerneltype, sph_formulation, densitydiffusiontype, ViscSpec, boundarytype, simflags>();
-		m_bcEngine = CUDABoundaryConditionsSelector<kerneltype, ViscSpec, boundarytype, simflags>::select();
+		m_forcesEngine = new CUDAForcesEngine<kerneltype, sph_formulation, densitydiffusiontype, /*ViscSpec, */boundarytype, simflags>();
+		m_bcEngine = CUDABoundaryConditionsSelector<kerneltype, /*ViscSpec,*/boundarytype, simflags>::select();
 
 		// TODO should be allocated by the integration scheme
 		m_allocPolicy = make_shared<PredCorrAllocPolicy>();
@@ -498,7 +502,7 @@ class CUDASimFramework {
 	static const DensityDiffusionType densitydiffusiontype = Args::DensityDiffusion::value;
 
 	static const RheologyType rheologytype = Args::Rheology::value;
-	static const TurbulenceModel turbmodel = Args::Turbulence::value;
+	//static const TurbulenceModel turbmodel = Args::Turbulence::value;
 	static const ComputationalViscosityType compvisc = Args::ComputationalViscosity::value;
 	static const ViscousModel viscmodel = Args::ViscModel::value;
 	static const AverageOperator viscavgop = Args::ViscAveraging::value;
@@ -513,7 +517,7 @@ class CUDASimFramework {
 			sph_formulation,
 			densitydiffusiontype,
 			rheologytype,
-			turbmodel,
+			//turbmodel,
 			compvisc,
 			viscmodel,
 			viscavgop,

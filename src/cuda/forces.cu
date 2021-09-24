@@ -181,7 +181,7 @@ template<
 	KernelType kerneltype,
 	SPHFormulation sph_formulation,
 	DensityDiffusionType densitydiffusiontype,
-	typename ViscSpec,
+	//typename ViscSpec,
 	BoundaryType boundarytype,
 	flag_t simflags>
 class CUDAForcesEngine;
@@ -253,13 +253,13 @@ template<
 	KernelType kerneltype,
 	SPHFormulation sph_formulation,
 	DensityDiffusionType densitydiffusiontype,
-	typename ViscSpec,
+	//typename ViscSpec,
 	BoundaryType boundarytype,
 	flag_t simflags>
 class CUDAForcesEngine : public AbstractForcesEngine
 {
-	static const RheologyType rheologytype = ViscSpec::rheologytype;
-	static const TurbulenceModel turbmodel = ViscSpec::turbmodel;
+	//static const RheologyType rheologytype = ViscSpec::rheologytype;
+	//static const TurbulenceModel turbmodel = ViscSpec::turbmodel;
 
 	static const bool needs_eulerVel = (boundarytype == SA_BOUNDARY &&
 			(turbmodel == KEPSILON || (simflags & ENABLE_INLET_OUTLET)));
@@ -649,7 +649,8 @@ compute_density_diffusion(
 
 	cuforces::computeDensityDiffusionDevice
 		<kerneltype, sph_formulation, densitydiffusiontype, boundarytype,
-		 ViscSpec, simflags, PT_FLUID>
+		 //ViscSpec, 
+		 simflags, PT_FLUID>
 		<<<numBlocks, numThreads>>>(params);
 
 	// check if last kernel invocation generated an error
@@ -748,7 +749,7 @@ run_forces(
 		dummy_shared = 2560 - dtadapt*BLOCK_SIZE_FORCES*4;
 	#endif
 
-	forces_params<kerneltype, sph_formulation, densitydiffusiontype, boundarytype, ViscSpec, simflags, PT_FLUID, PT_FLUID> params_ff(
+	forces_params<kerneltype, sph_formulation, densitydiffusiontype, boundarytype, /*ViscSpec,*/ simflags, PT_FLUID, PT_FLUID> params_ff(
 		bufread, bufwrite,
 		fromParticle, toParticle,
 		deltap, slength, influenceradius, step, dt,
@@ -757,14 +758,14 @@ run_forces(
 
 	cuforces::forcesDevice<<< numBlocks, numThreads, dummy_shared >>>(params_ff);
 	{
-		forces_params<kerneltype, sph_formulation, densitydiffusiontype, boundarytype, ViscSpec, simflags, PT_FLUID, PT_VERTEX> params_fv(
+		forces_params<kerneltype, sph_formulation, densitydiffusiontype, boundarytype, /*ViscSpec, */simflags, PT_FLUID, PT_VERTEX> params_fv(
 			bufread, bufwrite,
 			fromParticle, toParticle,
 			deltap, slength, influenceradius, step, dt,
 			epsilon,
 			IOwaterdepth);
 
-		forces_params<kerneltype, sph_formulation, densitydiffusiontype, boundarytype, ViscSpec, simflags, PT_VERTEX, PT_FLUID> params_vf(
+		forces_params<kerneltype, sph_formulation, densitydiffusiontype, boundarytype, /*ViscSpec,*/ simflags, PT_VERTEX, PT_FLUID> params_vf(
 			bufread, bufwrite,
 			fromParticle, toParticle,
 			deltap, slength, influenceradius, step, dt,
@@ -774,7 +775,7 @@ run_forces(
 		vertex_forces(numBlocks, numThreads, dummy_shared, params_fv, params_vf);
 	}
 
-	forces_params<kerneltype, sph_formulation, densitydiffusiontype, boundarytype, ViscSpec, simflags, PT_FLUID, PT_BOUNDARY> params_fb(
+	forces_params<kerneltype, sph_formulation, densitydiffusiontype, boundarytype, /*ViscSpec, */simflags, PT_FLUID, PT_BOUNDARY> params_fb(
 		bufread, bufwrite,
 		fromParticle, toParticle,
 		deltap, slength, influenceradius, step, dt,
@@ -784,7 +785,7 @@ run_forces(
 	cuforces::forcesDevice<<< numBlocks, numThreads, dummy_shared >>>(params_fb);
 
 	if (compute_object_forces || (boundarytype == DYN_BOUNDARY)) {
-		forces_params<kerneltype, sph_formulation, densitydiffusiontype, boundarytype, ViscSpec, simflags, PT_BOUNDARY, PT_FLUID> params_bf(
+		forces_params<kerneltype, sph_formulation, densitydiffusiontype, boundarytype, /*ViscSpec,*/ simflags, PT_BOUNDARY, PT_FLUID> params_bf(
 			bufread, bufwrite,
 			fromParticle, toParticle,
 			deltap, slength, influenceradius, step, dt,
@@ -794,7 +795,7 @@ run_forces(
 		boundary_forces(numBlocks, numThreads, dummy_shared, params_bf);
 	}
 
-	finalize_forces_params<sph_formulation, boundarytype, ViscSpec, simflags> params_finalize(
+	finalize_forces_params<sph_formulation, boundarytype, /*ViscSpec, */simflags> params_finalize(
 			bufread, bufwrite,
 			numParticles, fromParticle, toParticle, slength, deltap,
 			cflOffset,

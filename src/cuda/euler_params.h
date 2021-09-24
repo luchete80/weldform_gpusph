@@ -142,7 +142,6 @@ template<KernelType _kerneltype,
 	int _step,
 	RunMode _run_mode = SIMULATE,
 	bool _repacking = (_run_mode == REPACK),
-	bool _has_keps = _ViscSpec::turbmodel == KEPSILON && !_repacking,
 	bool _has_eulerVel =
 		(_has_keps || (_boundarytype == SA_BOUNDARY && (_simflags & ENABLE_INLET_OUTLET)))
 		&& !_repacking,
@@ -200,7 +199,8 @@ template<KernelType _kerneltype,
 	flag_t _simflags,
 	int _step>
 using euler_repack_params = euler_params<_kerneltype, SPH_F1,
-	  _boundarytype, repackViscSpec<_simflags>, _simflags, _step, REPACK>;
+	  _boundarytype,
+	  _simflags, _step, REPACK>;
 
 #endif // _EULER_PARAMS_H
 
