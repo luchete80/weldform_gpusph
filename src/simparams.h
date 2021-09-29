@@ -53,7 +53,7 @@ typedef struct SimParams {
 	const DensityDiffusionType densitydiffusiontype;	///< Type of density diffusion corrective term
 
 	const RheologyType		rheologytype;				///< Rheology type (Newtonian etc)
-	const TurbulenceModel	turbmodel;					///< Turbulence model
+	//const TurbulenceModel	turbmodel;					///< Turbulence model
 	const ComputationalViscosityType compvisc;			///< Viscosity kind used in computations (kinematic vs dynamic)
 	const ViscousModel		viscmodel;					///< Discretization model for the viscous operator (e.g. Morris vs Monaghan)
 	const AverageOperator	viscavgop;					///< Averaging operator used in the viscous model (e.g. arithmetic vs harmonic)
@@ -264,7 +264,7 @@ typedef struct SimParams {
 		sph_formulation(Framework::sph_formulation),
 		densitydiffusiontype(Framework::densitydiffusiontype),
 		rheologytype(Framework::rheologytype),
-		turbmodel(Framework::turbmodel),
+		//turbmodel(Framework::turbmodel),
 		compvisc(Framework::compvisc),
 		viscmodel(Framework::viscmodel),
 		viscavgop(Framework::viscavgop),

@@ -106,9 +106,9 @@ template<typename EP, ///< euler_param template specialization
 	KernelType _kerneltype = EP::kerneltype,
 	SPHFormulation _sph_formulation = EP::sph_formulation,
 	BoundaryType _boundarytype = EP::boundarytype,
-	typename _ViscSpec = typename EP::ViscSpec,
+	//typename _ViscSpec = typename EP::ViscSpec,
 	flag_t _simflags = EP::simflags,
-	bool _has_keps = _ViscSpec::turbmodel == KEPSILON && ! EP::repacking,
+	//bool _has_keps = _ViscSpec::turbmodel == KEPSILON && ! EP::repacking,
 	bool _has_eulerVel = EP::has_eulerVel>
 struct euler_particle_data :
 	common_euler_particle_data,
@@ -121,7 +121,7 @@ struct euler_particle_data :
 	static const KernelType kerneltype = _kerneltype;
 	static const SPHFormulation sph_formulation = _sph_formulation;
 	static const BoundaryType boundarytype = _boundarytype;
-	using ViscSpec = _ViscSpec;
+	//using ViscSpec = _ViscSpec;
 	static const flag_t simflags = _simflags;
 	static const bool has_keps = _has_keps;
 	static const bool has_eulerVel = _has_eulerVel;
@@ -397,7 +397,7 @@ template<typename EP, ///< euler_params template instantiation type
 	KernelType kerneltype = EP::kerneltype,
 	SPHFormulation sph_formulation = EP::sph_formulation,
 	BoundaryType boundarytype = EP::boundarytype,
-	typename ViscSpec = typename EP::ViscSpec,
+	//typename ViscSpec = typename EP::ViscSpec,
 	flag_t simflags = EP::simflags,
 	int step = EP::step>
 __global__ void

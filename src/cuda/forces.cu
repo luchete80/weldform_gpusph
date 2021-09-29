@@ -261,8 +261,8 @@ class CUDAForcesEngine : public AbstractForcesEngine
 	//static const RheologyType rheologytype = ViscSpec::rheologytype;
 	//static const TurbulenceModel turbmodel = ViscSpec::turbmodel;
 
-	static const bool needs_eulerVel = (boundarytype == SA_BOUNDARY &&
-			(turbmodel == KEPSILON || (simflags & ENABLE_INLET_OUTLET)));
+	static const bool needs_eulerVel = (boundarytype == SA_BOUNDARY /*&&
+			(turbmodel == KEPSILON || (simflags & ENABLE_INLET_OUTLET))*/);
 
 
 void
@@ -583,7 +583,7 @@ dtreduce(	float	slength,
 		if (dt_gam < dt)
 			dt = dt_gam;
 	}
-
+	/* LUCIANO
 	if (rheologytype != INVISCID || turbmodel > ARTIFICIAL) {
 		/* Stability condition from viscosity h²/ν
 		   We get the maximum kinematic viscosity from the caller, and in the KEPS case we
@@ -597,7 +597,7 @@ dtreduce(	float	slength,
 		dt_visc *= 0.125; // TODO allow customization
 		if (dt_visc < dt)
 			dt = dt_visc;
-	}
+	}*/
 
 	// check if last kernel invocation generated an error
 	KERNEL_CHECK_ERROR;

@@ -43,7 +43,7 @@ template<
 	SPHFormulation sph_formulation,
 	BoundaryType boundarytype,
 	KernelType kerneltype,
-	typename ViscSpec,
+	//typename ViscSpec,
 	flag_t simflags>
 class CUDAPredCorrEngine : public AbstractIntegrationEngine
 {
@@ -351,7 +351,7 @@ basicstep(
 			bufread, bufwrite, numParticles, dt, t)); \
 	} else { \
 		cueuler::eulerDevice<<< numBlocks, numThreads >>>( \
-			euler_params<kerneltype, sph_formulation, boundarytype, /*ViscSpec, */simflags, step>( \
+			euler_params<kerneltype, sph_formulation, boundarytype, simflags, step>( \
 			bufread, bufwrite, numParticles, dt, t)); \
 	} \
 	break;

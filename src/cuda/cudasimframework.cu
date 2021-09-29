@@ -92,9 +92,9 @@ struct CUDABoundaryConditionsSelector
 template<KernelType kerneltype,
 // typename ViscSpec, 
 flag_t simflags>
-struct CUDABoundaryConditionsSelector<kerneltype, ViscSpec, SA_BOUNDARY, simflags>
+struct CUDABoundaryConditionsSelector<kerneltype, /*ViscSpec, */SA_BOUNDARY, simflags>
 {
-	typedef CUDABoundaryConditionsEngine<kerneltype, ViscSpec, SA_BOUNDARY, simflags> BCEtype;
+	typedef CUDABoundaryConditionsEngine<kerneltype, /*ViscSpec, */SA_BOUNDARY, simflags> BCEtype;
 	static BCEtype* select()
 	{ return new BCEtype(); } // TODO FIXME when we have proper BCEs
 };

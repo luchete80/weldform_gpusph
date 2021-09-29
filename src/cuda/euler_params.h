@@ -137,7 +137,7 @@ struct energy_euler_params : Energy_params<>
 template<KernelType _kerneltype,
 	SPHFormulation _sph_formulation,
 	BoundaryType _boundarytype,
-	typename _ViscSpec,
+	//typename _ViscSpec,
 	flag_t _simflags,
 	int _step,
 	RunMode _run_mode = SIMULATE,
@@ -165,7 +165,7 @@ struct euler_params :
 	static constexpr KernelType kerneltype = _kerneltype;
 	static constexpr SPHFormulation sph_formulation = _sph_formulation;
 	static constexpr BoundaryType boundarytype = _boundarytype;
-	using ViscSpec = _ViscSpec;
+	//using ViscSpec = _ViscSpec;
 	static constexpr flag_t simflags = _simflags;
 	static constexpr int step = _step;
 	static const RunMode run_mode = _run_mode;

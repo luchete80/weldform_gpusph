@@ -156,13 +156,14 @@ template<KernelType _kerneltype,
 	bool has_eulerVel = (_has_io || _has_keps),
 	typename eulervel_struct =
 		typename COND_STRUCT(has_eulerVel, eulervel_sa_bc_params),
-	typename keps_struct =
-		typename COND_STRUCT(_has_keps, keps_sa_bc_params)
+	//typename keps_struct =
+	//	typename COND_STRUCT(_has_keps, keps_sa_bc_params)
 	>
 struct sa_segment_bc_params :
 	common_sa_bc_params,
-	eulervel_struct,
-	keps_struct
+	eulervel_struct
+	//,
+	//keps_struct
 {
 	static constexpr KernelType kerneltype = _kerneltype; //! kernel type
 	//using ViscSpec = _ViscSpec; //! viscous model specification
@@ -204,7 +205,7 @@ struct sa_segment_bc_params :
 			_gGam, _vertices, _vertPos,
 			_numParticles, _deltap, _slength, _influenceradius),
 		eulervel_struct(_eulerVel),
-		keps_struct(_tke, _eps)
+		//keps_struct(_tke, _eps)
 	{}
 };
 
@@ -282,8 +283,8 @@ template<KernelType _kerneltype,
 	bool has_eulerVel = (_has_io || _has_keps),
 	typename eulervel_struct =
 		typename COND_STRUCT(has_eulerVel && !_repacking, eulervel_sa_bc_params),
-	typename keps_struct =
-		typename COND_STRUCT(_has_keps && !_repacking, keps_sa_bc_params),
+	//typename keps_struct =
+	//	typename COND_STRUCT(_has_keps && !_repacking, keps_sa_bc_params),
 	typename io_struct =
 		typename COND_STRUCT(_has_io && !_repacking, sa_io_params),
 	typename clone_struct =
@@ -292,7 +293,7 @@ template<KernelType _kerneltype,
 struct sa_vertex_bc_params :
 	common_sa_bc_params,
 	eulervel_struct,
-	keps_struct,
+	//keps_struct,
 	io_struct,
 	clone_struct
 {
@@ -335,7 +336,7 @@ struct sa_vertex_bc_params :
 			bufread.getRawPtr<BUFFER_VERTPOS>(),
 			_numParticles, _deltap, _slength, _influenceradius),
 		eulervel_struct(bufwrite),
-		keps_struct(bufwrite),
+		//keps_struct(bufwrite),
 		io_struct(bufwrite, _dt),
 		clone_struct(bufwrite, _newNumParticles,
 			_totParticles, _deviceId, _numDevices)
