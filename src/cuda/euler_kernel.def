@@ -219,7 +219,7 @@ continuity_integration(EP const& params, P &pdata, int index, float dt)
 /// Integrate k and e in the \f$\kappa-\epsilon\f$ model
 template<typename EP, typename P>
 __device__ __forceinline__
-enable_if_t<EP::has_keps>
+//enable_if_t<EP::has_keps>
 integrate_k_e(EP const& params, P &pdata, int index, float dt)
 {
 	const float3 dkde = params.keps_dkde[index];
@@ -263,7 +263,7 @@ update_normals(EP const& params, P &pdata, int index)
 /// Integrate the boundary and vertex eulerian velocity in the k-epsilon case
 template<typename EP, typename P>
 __device__ __forceinline__
-enable_if_t<EP::has_keps>
+//enable_if_t<EP::has_keps>
 integrate_eulerian_velocity(EP const& params, P &pdata, float dt)
 {
 	if (!IO_BOUNDARY(pdata.info) || (VERTEX(pdata.info) && CORNER(pdata.info))) {
@@ -327,7 +327,7 @@ write_eulerVel(EP const& params, P &pdata, int index)
  */
 template<typename EP, typename P>
 __device__ __forceinline__
-enable_if_t<EP::has_keps>
+//enable_if_t<EP::has_keps>
 write_viscosity_coeff(EP const& params, P &pdata, int index)
 {
 	params.newTKE[index] = pdata.keps_k;
@@ -336,7 +336,7 @@ write_viscosity_coeff(EP const& params, P &pdata, int index)
 }
 template<typename EP, typename P>
 __device__ __forceinline__
-enable_if_t<not EP::has_keps>
+//enable_if_t<not EP::has_keps>
 write_viscosity_coeff(EP const& params, P &pdata, int index)
 { /* do nothing*/ }
 
@@ -456,10 +456,11 @@ eulerDevice(EP params)
 
 				// updating internal energy
 				integrate_energy(params, pdata, index, dt);
-
+				
+				//LUCIANO, COMMENT
 				// Updating k and e for k-e model
-				if (!params.repacking)
-					integrate_k_e(params, pdata, index, dt);
+				// if (!params.repacking)
+					// integrate_k_e(params, pdata, index, dt);
 
 				break;
 
@@ -531,7 +532,9 @@ eulerDevice(EP params)
 	if (!params.repacking) {
 		write_volume(params, pdata, index);
 		write_eulerVel(params, pdata, index);
-		write_viscosity_coeff(params, pdata, index);
+		// LUCIANO> ONLY IF KEPSILON
+		// write_viscosity_coeff(params, pdata, index);
+		
 		// update normal of boundary element, if using SA_BOUNDARY and we have moving bodies
 		update_normals(params, pdata, index);
 	}

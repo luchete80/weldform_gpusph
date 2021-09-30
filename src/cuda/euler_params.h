@@ -143,7 +143,7 @@ template<KernelType _kerneltype,
 	RunMode _run_mode = SIMULATE,
 	bool _repacking = (_run_mode == REPACK),
 	bool _has_eulerVel =
-		(_has_keps || (_boundarytype == SA_BOUNDARY && (_simflags & ENABLE_INLET_OUTLET)))
+		(/*_has_keps || */(_boundarytype == SA_BOUNDARY && (_simflags & ENABLE_INLET_OUTLET)))
 		&& !_repacking,
 	typename eulerVel_params = typename
 		COND_STRUCT(_has_eulerVel, EulerVel_params<>),
@@ -158,7 +158,7 @@ struct euler_params :
 	COND_STRUCT((_simflags & ENABLE_XSPH) && !_repacking, xsph_euler_params),
 	eulerVel_params,
 	sa_boundary_moving_params,
-	COND_STRUCT(_has_keps, keps_euler_params),
+	//COND_STRUCT(_has_keps, keps_euler_params),
 	grenier_params,
 	COND_STRUCT(_simflags & ENABLE_INTERNAL_ENERGY, energy_euler_params)
 {

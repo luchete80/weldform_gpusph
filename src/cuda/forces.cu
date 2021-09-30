@@ -494,10 +494,11 @@ bind_textures(
 		CUDA_SAFE_CALL(cudaBindTexture(0, boundTex, bufread.getData<BUFFER_BOUNDELEMENTS>(), numParticles*sizeof(float4)));
 	}
 
-	if (run_mode != REPACK && turbmodel == KEPSILON) {
-		CUDA_SAFE_CALL(cudaBindTexture(0, keps_kTex, bufread.getData<BUFFER_TKE>(), numParticles*sizeof(float)));
-		CUDA_SAFE_CALL(cudaBindTexture(0, keps_eTex, bufread.getData<BUFFER_EPSILON>(), numParticles*sizeof(float)));
-	}
+	//LUCIANO
+	// if (run_mode != REPACK && turbmodel == KEPSILON) {
+		// CUDA_SAFE_CALL(cudaBindTexture(0, keps_kTex, bufread.getData<BUFFER_TKE>(), numParticles*sizeof(float)));
+		// CUDA_SAFE_CALL(cudaBindTexture(0, keps_eTex, bufread.getData<BUFFER_EPSILON>(), numParticles*sizeof(float)));
+	// }
 }
 
 void
@@ -583,21 +584,21 @@ dtreduce(	float	slength,
 		if (dt_gam < dt)
 			dt = dt_gam;
 	}
-	/* LUCIANO
-	if (rheologytype != INVISCID || turbmodel > ARTIFICIAL) {
+	//LUCIANO
+	//if (rheologytype != INVISCID || turbmodel > ARTIFICIAL) {
 		/* Stability condition from viscosity h²/ν
 		   We get the maximum kinematic viscosity from the caller, and in the KEPS case we
 		   add the maximum KEPS
 		 */
-		float visccoeff = max_kinematic;
-		if (turbmodel == KEPSILON)
-			visccoeff += cflmax(numBlocks, cfl_keps, tempCfl);
+		// float visccoeff = max_kinematic;
+		// if (turbmodel == KEPSILON)
+			// visccoeff += cflmax(numBlocks, cfl_keps, tempCfl);
 
-		float dt_visc = slength*slength/visccoeff;
-		dt_visc *= 0.125; // TODO allow customization
-		if (dt_visc < dt)
-			dt = dt_visc;
-	}*/
+		// float dt_visc = slength*slength/visccoeff;
+		// dt_visc *= 0.125; // TODO allow customization
+		// if (dt_visc < dt)
+			// dt = dt_visc;
+	// }
 
 	// check if last kernel invocation generated an error
 	KERNEL_CHECK_ERROR;

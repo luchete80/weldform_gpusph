@@ -405,7 +405,7 @@ struct forces_params :
 		water_depth_cond(_IOwaterdepth),
 		//keps_cond(bufread, bufwrite),
 		energy_cond(bufwrite),
-		visc_cond(bufread)
+		//visc_cond(bufread) //LUCIANO
 	{}
 };
 
@@ -473,7 +473,7 @@ struct finalize_forces_params :
 	static const bool repacking = _repacking;
 	//static const bool has_keps = _has_keps;
 	//static const bool has_effective_visc = _has_effective_visc;
-	static const bool inviscid = _inviscid;
+	//static const bool inviscid = _inviscid;
 
 	// This structure provides a constructor that takes as arguments the union of the
 	// parameters that would ever be passed to the finalize forces kernel.

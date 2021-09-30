@@ -713,13 +713,13 @@ template<KernelType _kerneltype,
 	SPHFormulation _sph_formulation,
 	DensityDiffusionType _densitydiffusiontype,
 	BoundaryType _boundarytype,
-	typename _ViscSpec,
+	//typename _ViscSpec,
 	flag_t _simflags,
 	ParticleType _cptype,
 	ParticleType _nptype,
 	RunMode _run_mode = SIMULATE,
 	bool _repacking = (_run_mode == REPACK),
-	bool _has_keps = _ViscSpec::turbmodel == KEPSILON,
+	//bool _has_keps = _ViscSpec::turbmodel == KEPSILON,
 	bool _has_sps = _ViscSpec::turbmodel == SPS,
 	bool _has_effective_visc = NEEDS_EFFECTIVE_VISC(_ViscSpec::rheologytype),
 	typename vol_cond = typename COND_STRUCT(!_repacking && _sph_formulation == SPH_GRENIER &&
@@ -765,9 +765,9 @@ struct forces_particle_data :
 	static const DensityDiffusionType densitydiffusiontype = _densitydiffusiontype;
 	static const BoundaryType boundarytype = _boundarytype;
 
-	using ViscSpec = _ViscSpec;
-	static const ComputationalViscosityType compvisc = ViscSpec::compvisc;
-	static const RheologyType rheologytype = ViscSpec::rheologytype;
+	// using ViscSpec = _ViscSpec;
+	// static const ComputationalViscosityType compvisc = ViscSpec::compvisc;
+	// static const RheologyType rheologytype = ViscSpec::rheologytype;
 
 	static const flag_t simflags = _simflags;
 	static const ParticleType cptype = _cptype;
@@ -818,11 +818,11 @@ struct sa_finalize_particle_data
 
 template<SPHFormulation _sph_formulation,
 	BoundaryType _boundarytype,
-	typename _ViscSpec,
+	//typename _ViscSpec,
 	flag_t _simflags,
 	RunMode _run_mode = SIMULATE,
 	bool _repacking = (_run_mode == REPACK),
-	bool _has_keps = _ViscSpec::turbmodel == KEPSILON,
+	//bool _has_keps = _ViscSpec::turbmodel == KEPSILON,
 	bool _has_effective_visc = NEEDS_EFFECTIVE_VISC(_ViscSpec::rheologytype)>
 struct finalize_forces_particle_data :
 	// included unconditionally for all particles:
@@ -837,8 +837,8 @@ struct finalize_forces_particle_data :
 	static const SPHFormulation sph_formulation = _sph_formulation;
 	static const BoundaryType boundarytype = _boundarytype;
 
-	using ViscSpec = _ViscSpec;
-	static const ComputationalViscosityType compvisc = ViscSpec::compvisc;
+	// using ViscSpec = _ViscSpec;
+	// static const ComputationalViscosityType compvisc = ViscSpec::compvisc;
 
 	static const flag_t simflags = _simflags;
 	static const bool has_keps = _has_keps;
@@ -1001,7 +1001,7 @@ struct internal_energy_particle_output
 };
 
 template<BoundaryType _boundarytype,
-	typename _ViscSpec,
+	//typename _ViscSpec,
 	flag_t _simflags,
 	ParticleType cptype,
 	ParticleType nptype,
@@ -1016,7 +1016,7 @@ struct forces_particle_output :
 	COND_STRUCT(_simflags & ENABLE_INTERNAL_ENERGY, internal_energy_particle_output)
 {
 	static const BoundaryType boundarytype = _boundarytype;
-	using ViscSpec = _ViscSpec;
+	//using ViscSpec = _ViscSpec;
 	static const flag_t simflags = _simflags;
 	static const bool has_keps = _has_keps;
 
@@ -1037,16 +1037,18 @@ template<BoundaryType _boundarytype, typename ViscSpec, flag_t _simflags>
 struct finalize_particle_output :
 	common_particle_output,
 	COND_STRUCT(_boundarytype == SA_BOUNDARY && USING_DYNAMIC_GAMMA(_simflags) && (_simflags & ENABLE_DTADAPT),
-		gamma_cfl_particle_output),
-	COND_STRUCT(ViscSpec::turbmodel == KEPSILON, keps_particle_output)
+		gamma_cfl_particle_output)
+		//,
+	//COND_STRUCT(ViscSpec::turbmodel == KEPSILON, keps_particle_output)
 {
 	template<typename FP>
 	__device__ __forceinline__
 	finalize_particle_output(FP const& params, const uint index) :
 		common_particle_output(params, index),
 		COND_STRUCT(_boundarytype == SA_BOUNDARY && USING_DYNAMIC_GAMMA(_simflags) && (_simflags & ENABLE_DTADAPT),
-			gamma_cfl_particle_output)(params, index),
-		COND_STRUCT(ViscSpec::turbmodel == KEPSILON, keps_particle_output)(params, index)
+			gamma_cfl_particle_output)(params, index)
+			//,
+		//COND_STRUCT(ViscSpec::turbmodel == KEPSILON, keps_particle_output)(params, index)
 	{}
 };
 
@@ -1184,11 +1186,11 @@ template<KernelType kerneltype,
 	SPHFormulation _sph_formulation,
 	DensityDiffusionType densitydiffusiontype,
 	BoundaryType boundarytype,
-	typename _ViscSpec,
+	//typename _ViscSpec,
 	flag_t simflags,
 	ParticleType cptype,
 	ParticleType _nptype,
-	bool _has_keps = _ViscSpec::turbmodel == KEPSILON,
+	//bool _has_keps = _ViscSpec::turbmodel == KEPSILON,
 	bool _has_sps = _ViscSpec::turbmodel == SPS,
 	bool _has_effective_visc = NEEDS_EFFECTIVE_VISC(_ViscSpec::rheologytype) >
 struct forces_neib_data :
@@ -1211,9 +1213,9 @@ struct forces_neib_data :
 {
 	static constexpr SPHFormulation sph_formulation = _sph_formulation;
 
-	using ViscSpec = _ViscSpec;
-	static const ComputationalViscosityType compvisc = ViscSpec::compvisc;
-	static const RheologyType rheologytype = ViscSpec::rheologytype;
+	// using ViscSpec = _ViscSpec;
+	// static const ComputationalViscosityType compvisc = ViscSpec::compvisc;
+	// static const RheologyType rheologytype = ViscSpec::rheologytype;
 
 	static constexpr ParticleType	nptype = _nptype;
 	static const bool has_keps = _has_keps;
@@ -3127,7 +3129,7 @@ struct dyndt_keps_shared_data
 };
 
 template<BoundaryType boundarytype, typename ViscSpec, flag_t simflags,
-	bool has_keps = ViscSpec::turbmodel == KEPSILON,
+	//bool has_keps = ViscSpec::turbmodel == KEPSILON,
 	bool dtadapt = simflags & ENABLE_DTADAPT>
 struct forces_shared_data :
 	COND_SHARED(dtadapt, dyndt_forces_shared_data),
@@ -3624,7 +3626,7 @@ template<typename FP, /* forces_params<kerneltype, sph_formulation, etc> */
 	SPHFormulation sph_formulation = FP::sph_formulation,
 	DensityDiffusionType densitydiffusiontype = FP::densitydiffusiontype,
 	BoundaryType boundarytype = FP::boundarytype,
-	typename ViscSpec = typename FP::ViscSpec,
+	//typename ViscSpec = typename FP::ViscSpec,
 	flag_t simflags = FP::simflags,
 	ParticleType cptype = FP::cptype,
 	ParticleType nptype = FP::nptype>
@@ -3673,7 +3675,7 @@ forcesDevice(FP params)
 			pdata(index, pos, info, params);
 
 		// Preparing particle output variables
-		forces_particle_output<boundarytype, ViscSpec, simflags, cptype, nptype> pout(params, index);
+		forces_particle_output<boundarytype, /*ViscSpec,*/ simflags, cptype, nptype> pout(params, index);
 
 		/* And finally the neighbors list traversal support */
 
@@ -3714,7 +3716,7 @@ forcesDevice(FP params)
 				continue;
 
 			// Load rest of neib data
-			forces_neib_data<kerneltype, sph_formulation, densitydiffusiontype, boundarytype, ViscSpec, simflags, cptype, nptype> const
+			forces_neib_data<kerneltype, sph_formulation, densitydiffusiontype, boundarytype, /*ViscSpec,*/ simflags, cptype, nptype> const
 				ndata(pdata, params, neib_index, neib_info, relPos, r);
 
 			// Contributions from this neighbor
@@ -3740,7 +3742,7 @@ forcesDevice(FP params)
 template<typename FP, /* finalize_forces_params<...> */
 	SPHFormulation sph_formulation = FP::sph_formulation,
 	BoundaryType boundarytype = FP::boundarytype,
-	typename ViscSpec = typename FP::ViscSpec,
+	//typename ViscSpec = typename FP::ViscSpec,
 	flag_t simflags = FP::simflags>
 __global__ void
 finalizeforcesDevice(FP params)
@@ -3749,7 +3751,7 @@ finalizeforcesDevice(FP params)
 	const uint index = INTMUL(blockIdx.x,blockDim.x) + threadIdx.x + params.fromParticle;
 
 	// Allocating shared data in case of adaptive time step
-	__shared__ forces_shared_data<boundarytype, ViscSpec, simflags> shared;
+	__shared__ forces_shared_data<boundarytype, /*ViscSpec,*/ simflags> shared;
 	shared.init();
 
 #pragma unroll
@@ -3774,11 +3776,11 @@ finalizeforcesDevice(FP params)
 			break;
 
 		// Loading the rest of particle data
-		finalize_forces_particle_data<sph_formulation, boundarytype, ViscSpec, simflags> const
+		finalize_forces_particle_data<sph_formulation, boundarytype, /*ViscSpec,*/ simflags> const
 			pdata(index, pos, info, params);
 
 		// Preparing particle output variables
-		finalize_particle_output<boundarytype, ViscSpec, simflags> pout(params, index);
+		finalize_particle_output<boundarytype, /*ViscSpec,*/ simflags> pout(params, index);
 
 		// common division or multiplication
 		forces_fixup(params, pdata, pout);
@@ -4161,7 +4163,7 @@ template<KernelType kerneltype,
 	SPHFormulation sph_formulation,
 	DensityDiffusionType densitydiffusiontype,
 	BoundaryType boundarytype,
-	typename ViscSpec,
+	//typename ViscSpec,
 	flag_t simflags,
 	ParticleType cptype,
 	ParticleType nptype,
@@ -4208,7 +4210,7 @@ template<KernelType kerneltype,
 	SPHFormulation sph_formulation,
 	DensityDiffusionType densitydiffusiontype,
 	BoundaryType boundarytype,
-	typename ViscSpec,
+	//typename ViscSpec,
 	flag_t simflags,
 	ParticleType cptype,
 	ParticleType nptype>
@@ -4243,7 +4245,7 @@ template<KernelType kerneltype,
 	SPHFormulation sph_formulation,
 	DensityDiffusionType densitydiffusiontype,
 	BoundaryType boundarytype,
-	typename ViscSpec,
+	//typename ViscSpec,
 	flag_t simflags,
 	ParticleType cptype>
 __global__ void
@@ -4270,17 +4272,17 @@ computeDensityDiffusionDevice(density_diffusion_params<kerneltype, sph_formulati
 	float DrDt = 0;
 
 	density_diffusion_interaction
-		<kerneltype, sph_formulation, densitydiffusiontype, boundarytype, ViscSpec, simflags,
+		<kerneltype, sph_formulation, densitydiffusiontype, boundarytype, /*ViscSpec, */simflags,
 		cptype, PT_FLUID>(params, pdata, DrDt);
 	// No contribution to density diffusion from vertex particles even in the SA case
 	// (ref: ask Agnès and Antoine)
 #if 0
 	density_diffusion_interaction
-		<kerneltype, sph_formulation, densitydiffusiontype, boundarytype, ViscSpec, simflags,
+		<kerneltype, sph_formulation, densitydiffusiontype, boundarytype, /*ViscSpec, */simflags,
 		cptype, PT_VERTEX>(params, pdata, DrDt);
 #endif
 	density_diffusion_interaction
-		<kerneltype, sph_formulation, densitydiffusiontype, boundarytype, ViscSpec, simflags,
+		<kerneltype, sph_formulation, densitydiffusiontype, boundarytype, /*ViscSpec,*/ simflags,
 		cptype, PT_BOUNDARY>(params, pdata, DrDt);
 
 	density_diffusion_fixup(params, pdata, DrDt);
