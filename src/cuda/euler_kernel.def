@@ -113,7 +113,7 @@ template<typename EP, ///< euler_param template specialization
 struct euler_particle_data :
 	common_euler_particle_data,
 	COND_STRUCT(_has_eulerVel, euler_vel_particle_data),
-	COND_STRUCT(_has_keps, keps_particle_data),
+	//COND_STRUCT(_has_keps, keps_particle_data),
 	COND_STRUCT(_simflags & ENABLE_XSPH && !EP::repacking, xsph_particle_data),
 	COND_STRUCT(_sph_formulation == SPH_GRENIER && !EP::repacking, grenier_particle_data),
 	COND_STRUCT(_simflags & ENABLE_INTERNAL_ENERGY, energy_particle_data)
@@ -123,7 +123,7 @@ struct euler_particle_data :
 	static const BoundaryType boundarytype = _boundarytype;
 	//using ViscSpec = _ViscSpec;
 	static const flag_t simflags = _simflags;
-	static const bool has_keps = _has_keps;
+	//static const bool has_keps = _has_keps;
 	static const bool has_eulerVel = _has_eulerVel;
 
 	// shorthand for the type of the euler params
@@ -134,7 +134,7 @@ struct euler_particle_data :
 	euler_particle_data(const uint _index, params_t const& params) :
 		common_euler_particle_data(_index, params),
 		COND_STRUCT(has_eulerVel, euler_vel_particle_data)(_index, params),
-		COND_STRUCT(has_keps, keps_particle_data)(_index, params),
+		//COND_STRUCT(has_keps, keps_particle_data)(_index, params),
 		COND_STRUCT(simflags & ENABLE_XSPH && !EP::repacking, xsph_particle_data)(_index, params),
 		COND_STRUCT(sph_formulation == SPH_GRENIER && !EP::repacking, grenier_particle_data)(_index, params),
 		COND_STRUCT(simflags & ENABLE_INTERNAL_ENERGY, energy_particle_data)(_index, params)
