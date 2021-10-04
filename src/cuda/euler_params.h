@@ -158,7 +158,7 @@ struct euler_params :
 	COND_STRUCT((_simflags & ENABLE_XSPH) && !_repacking, xsph_euler_params),
 	eulerVel_params,
 	sa_boundary_moving_params,
-	COND_STRUCT(_has_keps, keps_euler_params),
+	//COND_STRUCT(_has_keps, keps_euler_params),
 	grenier_params,
 	COND_STRUCT(_simflags & ENABLE_INTERNAL_ENERGY, energy_euler_params)
 {

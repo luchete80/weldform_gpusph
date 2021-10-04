@@ -4,7 +4,7 @@ Platform:        Linux\n\
 Architecture:    x86_64\n\
 Current dir:     /home/luciano/Numerico/weldform_gpusph\n\
 This Makefile:   /home/luciano/Numerico/weldform_gpusph/Makefile\n\
-Used Makefiles:   Makefile Makefile.conf\n\
+Used Makefiles:   Makefile Makefile.conf dep/problems/Compression.d\n\
 Problem:         \n\
 Linearization:   yzx\n\
 Snapshot file:   ./GPUSPH-unknown-version-2021-10-04.tgz\n\
@@ -23,7 +23,7 @@ MPICXX:          g++\n\
 nvcc:            /usr/local/cuda/bin/nvcc -ccbin=g++\n\
 nvcc version:    11.4\n\
 LINKER:          /usr/local/cuda/bin/nvcc -ccbin=g++\n\
-Compute cap.:    30\n\
+Compute cap.:    35\n\
 Fastmath:        0\n\
 USE_MPI:         0\n\
 USE_HDF5:        0\n\
@@ -32,8 +32,8 @@ default paths:   /usr/include/c++/9 /usr/include/x86_64-linux-gnu/c++/9 /usr/inc
 INCPATH:          -Isrc -Isrc/OLD -Isrc/adaptors -Isrc/cuda -Isrc/geometries -Isrc/integrators -Isrc/problem_api -Isrc/problems -Isrc/writers -Isrc/problems -Isrc/problems/user -Ioptions\n\
 LIBPATH:          -L/usr/local/lib -L/usr/local/cuda/lib64\n\
 LIBS:             -lcudart -lpthread -lrt\n\
-LDFLAGS:           -L/usr/local/lib -L/usr/local/cuda/lib64 -arch=sm_30\n\
-CPPFLAGS:          -Isrc -Isrc/OLD -Isrc/adaptors -Isrc/cuda -Isrc/geometries -Isrc/integrators -Isrc/problem_api -Isrc/problems -Isrc/writers -Isrc/problems -Isrc/problems/user -Ioptions -D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS -D_GLIBCXX_USE_C99_MATH -DUSE_HDF5=0 -D__COMPUTE__=30\n\
+LDFLAGS:           -L/usr/local/lib -L/usr/local/cuda/lib64 -arch=sm_35\n\
+CPPFLAGS:          -Isrc -Isrc/OLD -Isrc/adaptors -Isrc/cuda -Isrc/geometries -Isrc/integrators -Isrc/problem_api -Isrc/problems -Isrc/writers -Isrc/problems -Isrc/problems/user -Ioptions -D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS -D_GLIBCXX_USE_C99_MATH -DUSE_HDF5=0 -D__COMPUTE__=35\n\
 CXXFLAGS:         -m64 -std=c++11 -O3\n\
-CUFLAGS:          -arch=sm_30 --generate-line-info -std=c++11 --compiler-options -m64,-O3\n\
+CUFLAGS:          -arch=sm_35 --generate-line-info -std=c++11 --compiler-options -m64,-O3\n\
 "

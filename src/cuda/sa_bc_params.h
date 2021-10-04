@@ -303,7 +303,7 @@ struct sa_vertex_bc_params :
 	static constexpr flag_t simflags = _simflags; //! simulation flags
 	static constexpr int step = _step; //! integration step
 	static constexpr bool has_io = _has_io; //! Open boundaries enabled?
-	static constexpr bool has_keps = _has_keps; //! Using the k-epsilon viscous model?
+	//static constexpr bool has_keps = _has_keps; //! Using the k-epsilon viscous model?
 	static constexpr bool has_moving = _has_moving; //! Do we have moving objects?
 	static constexpr RunMode run_mode = _run_mode; //! run mode: SIMULATE or REPACK
 	static constexpr bool repacking = _repacking; //! true if run_mode is REPACK
