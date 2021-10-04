@@ -1,2 +1,2 @@
 /* Define the compute capability GPU code was compiled for. */
-#define COMPUTE 30 /* fallback, default */
+#define COMPUTE 35 /* fallback, default */

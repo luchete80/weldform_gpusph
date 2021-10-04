@@ -7,8 +7,8 @@ This Makefile:   /home/luciano/Numerico/weldform_gpusph/Makefile\n\
 Used Makefiles:   Makefile Makefile.conf\n\
 Problem:         \n\
 Linearization:   yzx\n\
-Snapshot file:   ./GPUSPH-unknown-version-2021-09-30.tgz\n\
-Last problem:    DamBreak3D\n\
+Snapshot file:   ./GPUSPH-unknown-version-2021-10-04.tgz\n\
+Last problem:    Compression\n\
 Sources dir:     src src/OLD src/adaptors src/cuda src/geometries src/integrators src/problem_api src/problems src/writers\n\
 Options dir:     options\n\
 Objects dir:     build build/OLD build/adaptors build/cuda build/geometries build/integrators build/problem_api build/problems build/problems/user build/writers\n\
