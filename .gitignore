@@ -42,8 +42,6 @@ deviceQuery
 seewaves/
 *.csv
 profiling/
-scripts/list-cuda-cc
-scripts/
 *.h5sph
 *.vtk
 data_files
