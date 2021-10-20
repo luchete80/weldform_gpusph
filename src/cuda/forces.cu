@@ -261,8 +261,8 @@ class CUDAForcesEngine : public AbstractForcesEngine
 	//static const RheologyType rheologytype = ViscSpec::rheologytype;
 	//static const TurbulenceModel turbmodel = ViscSpec::turbmodel;
 
-	static const bool needs_eulerVel = (boundarytype == SA_BOUNDARY /*&&
-			(turbmodel == KEPSILON || (simflags & ENABLE_INLET_OUTLET))*/);
+//	static const bool needs_eulerVel = (boundarytype == SA_BOUNDARY /*&&
+//			(turbmodel == KEPSILON || (simflags & ENABLE_INLET_OUTLET))*/);
 
 
 void
@@ -480,14 +480,14 @@ bind_textures(
 	CUDA_SAFE_CALL(cudaBindTexture(0, infoTex, bufread.getData<BUFFER_INFO>(), numParticles*sizeof(particleinfo)));
 
 	const float4 *eulerVel = bufread.getData<BUFFER_EULERVEL>();
-	if (run_mode != REPACK && needs_eulerVel) {
-		if (!eulerVel)
-			throw std::invalid_argument("eulerVel not set but needed");
-		CUDA_SAFE_CALL(cudaBindTexture(0, eulerVelTex, eulerVel, numParticles*sizeof(float4)));
-	} else {
-		if (eulerVel)
-			std::cerr << "eulerVel set but not used" << std::endl;
-	}
+//	if (run_mode != REPACK && needs_eulerVel) {
+//		if (!eulerVel)
+//			throw std::invalid_argument("eulerVel not set but needed");
+//		CUDA_SAFE_CALL(cudaBindTexture(0, eulerVelTex, eulerVel, numParticles*sizeof(float4)));
+//	} else {
+//		if (eulerVel)
+//			std::cerr << "eulerVel set but not used" << std::endl;
+//	}
 
 	if (boundarytype == SA_BOUNDARY) {
 		CUDA_SAFE_CALL(cudaBindTexture(0, gamTex, bufread.getData<BUFFER_GRADGAMMA>(), numParticles*sizeof(float4)));
@@ -506,13 +506,13 @@ unbind_textures(RunMode run_mode)
 {
 	// TODO FIXME why are SPS textures unbound here but bound in sps?
 	// shouldn't we bind them in bind_textures() instead?
-	if (run_mode != REPACK && turbmodel == SPS) {
+	if (run_mode != REPACK /*&& turbmodel == SPS*/) {
 		CUDA_SAFE_CALL(cudaUnbindTexture(tau0Tex));
 		CUDA_SAFE_CALL(cudaUnbindTexture(tau1Tex));
 		CUDA_SAFE_CALL(cudaUnbindTexture(tau2Tex));
 	}
 
-	if (run_mode != REPACK && turbmodel == KEPSILON) {
+	if (run_mode != REPACK /*&& turbmodel == KEPSILON*/) {
 		CUDA_SAFE_CALL(cudaUnbindTexture(keps_kTex));
 		CUDA_SAFE_CALL(cudaUnbindTexture(keps_eTex));
 	}
@@ -681,8 +681,8 @@ vertex_forces(
 	// and for turbulent viscosity with the k-epsilon model
 	const bool waterdepth =
 		QUERY_ALL_FLAGS(simflags, ENABLE_INLET_OUTLET | ENABLE_WATER_DEPTH);
-	const bool keps = (turbmodel == KEPSILON);
-	if (waterdepth || keps) {
+	//const bool keps = (turbmodel == KEPSILON);
+	if (waterdepth /*|| keps*/) {
 		cuforces::forcesDevice<<< numBlocks, numThreads, dummy_shared >>>(params_vf);
 	}
 }
@@ -744,10 +744,10 @@ run_forces(
 	uint numBlocks = round_up(div_up(numParticlesInRange, numThreads), 4U);
 	#if (__COMPUTE__ == 20)
 	int dtadapt = !!(simflags & ENABLE_DTADAPT);
-	if (turbmodel == SPS)
-		dummy_shared = 3328 - dtadapt*BLOCK_SIZE_FORCES*4;
-	else
-		dummy_shared = 2560 - dtadapt*BLOCK_SIZE_FORCES*4;
+//	if (turbmodel == SPS)
+//		dummy_shared = 3328 - dtadapt*BLOCK_SIZE_FORCES*4;
+//	else
+//		dummy_shared = 2560 - dtadapt*BLOCK_SIZE_FORCES*4;
 	#endif
 
 	forces_params<kerneltype, sph_formulation, densitydiffusiontype, boundarytype, /*ViscSpec,*/ simflags, PT_FLUID, PT_FLUID> params_ff(
